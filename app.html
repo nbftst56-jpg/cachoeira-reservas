@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Reservas - MVP Firebase</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            color: #667eea;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .btn-logout {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .tab {
+            padding: 12px 24px;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .form-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .form-card.show {
+            display: block;
+        }
+        .sync-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .sync-badge.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <h1>🏖️ Sistema de Reservas</h1>
+                <p>Cachoeira do Bom Jesus</p>
+            </div>
+            <div class="user-info">
+                <span id="userEmail">Carregando...</span>
+                <button class="btn-logout" onclick="logout()">Sair</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('reservas')">Reservas</button>
+            <button class="tab" onclick="showTab('calendario')">Calendário</button>
+        </div>
+
+        <div id="tab-reservas" class="tab-content active">
+            <button class="btn-primary" onclick="showForm()">+ Nova Reserva</button>
+            
+            <div id="form" class="form-card">
+                <h3>Nova Reserva</h3>
+                <form onsubmit="saveReserva(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Cliente *</label>
+                            <input type="text" id="cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp *</label>
+                            <input type="text" id="whatsapp" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Unidade *</label>
+                            <select id="unidade" required>
+                                <option value="UN01">UN01</option>
+                                <option value="UN02">UN02</option>
+                                <option value="UN03">UN03</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Check-in *</label>
+                            <input type="date" id="checkin" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Check-out *</label>
+                            <input type="date" id="checkout" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor (R$) *</label>
+                            <input type="number" id="valor" step="0.01" required>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button type="submit" class="btn-primary">Salvar</button>
+                        <button type="button" onclick="hideForm()" style="margin-left: 10px;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <table style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Unidade</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="reservasTable">
+                    <tr><td colspan="6" style="text-align: center;">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tab-calendario" class="tab-content">
+            <h2>Calendário (em breve)</h2>
+            <p>Funcionalidade de calendário será adicionada em breve.</p>
+        </div>
+    </div>
+
+    <div id="syncBadge" class="sync-badge">✓ Sincronizado</div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-pnrL3UbNaAs48sgXhcO0tyIrcUmwMxI",
+            authDomain: "cachoeira-reservas.firebaseapp.com",
+            projectId: "cachoeira-reservas",
+            storageBucket: "cachoeira-reservas.firebasestorage.app",
+            messagingSenderId: "487018223797",
+            appId: "1:487018223797:web:2fe1a7e31319c58adac6fc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let reservas = [];
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('userEmail').textContent = user.email;
+                loadReservas();
+            }
+        });
+
+        function loadReservas() {
+            onSnapshot(collection(db, 'reservas'), (snapshot) => {
+                reservas = [];
+                snapshot.forEach((doc) => {
+                    reservas.push({ id: doc.id, ...doc.data() });
+                });
+                updateTable();
+                showSync();
+            });
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('reservasTable');
+            if (reservas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Nenhuma reserva cadastrada</td></tr>';
+                return;
+            }
+            tbody.innerHTML = reservas.map(r => `
+                <tr>
+                    <td>${r.cliente}</td>
+                    <td>${r.unidade}</td>
+                    <td>${r.checkin}</td>
+                    <td>${r.checkout}</td>
+                    <td>R$ ${parseFloat(r.valor).toFixed(2)}</td>
+                    <td>
+                        <button onclick="deleteReserva('${r.id}')" style="background: #f44336; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.saveReserva = async function(e) {
+            e.preventDefault();
+            const reserva = {
+                cliente: document.getElementById('cliente').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                unidade: document.getElementById('unidade').value,
+                checkin: document.getElementById('checkin').value,
+                checkout: document.getElementById('checkout').value,
+                valor: parseFloat(document.getElementById('valor').value),
+                createdAt: Timestamp.now()
+            };
+            try {
+                await addDoc(collection(db, 'reservas'), reserva);
+                alert('✅ Reserva salva!');
+                hideForm();
+            } catch (error) {
+                alert('❌ Erro: ' + error.message);
+            }
+        };
+
+        window.deleteReserva = async function(id) {
+            if (!confirm('Excluir reserva?')) return;
+            try {
+                await deleteDoc(doc(db, 'reservas', id));
+                alert('✅ Reserva excluída!');
+            } catch (error) {
+                alert('❌ Erro: ' + error.message);
+            }
+        };
+
+        window.showForm = function() {
+            document.getElementById('form').classList.add('show');
+        };
+
+        window.hideForm = function() {
+            document.getElementById('form').classList.remove('show');
+            document.querySelector('form').reset();
+        };
+
+        window.showTab = function(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        };
+
+        window.logout = async function() {
+            if (!confirm('Sair?')) return;
+            await signOut(auth);
+        };
+
+        function showSync() {
+            const badge = document.getElementById('syncBadge');
+            badge.classList.add('show');
+            setTimeout(() => badge.classList.remove('show'), 2000);
+        }
+    </script>
+</body>
+</html>
