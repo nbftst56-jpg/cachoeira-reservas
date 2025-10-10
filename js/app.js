@@ -232,6 +232,33 @@ function updateCalendar() {
         updateUnitReservaCount(unit);
     });
 }
+['A6', 'A7', 'A8', 'A9'].forEach(unit => {
+    // Cria HTML do calendário
+    const calendarHTML = `
+        <div class="unit-calendar">
+            <div class="unit-header">
+                <h3>🏠 ${unit}</h3>
+                <span class="reserva-count" id="count-${unit}">0 reservas</span>
+            </div>
+            <div class="calendar-days">
+                <div class="weekdays">
+                    <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+                </div>
+                <div class="days" id="days-${unit}"></div>
+            </div>
+            <div class="legend-mini">
+                <div><span class="dot entrada"></span>Entrada</div>
+                <div><span class="dot saida"></span>Saída</div>
+                <div><span class="dot sobreposicao"></span>Sobreposição</div>
+                <div><span class="dot hospedagem"></span>Hospedagem</div>
+            </div>
+        </div>
+    `;
+    
+    // Insere no container
+    document.getElementById('calendar-grid').innerHTML += calendarHTML;
+});
+
 
 function renderCalendarForUnit(unit) {
     const daysContainer = document.getElementById(`days-${unit}`);
