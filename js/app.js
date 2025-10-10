@@ -1,5 +1,3 @@
-
-
 let currentMonth = new Date();
 let currentTimelineMonth = new Date();
 let reservas = [];
@@ -1313,3 +1311,15 @@ async function limparTodosDados() {
         }
     }
 }
+// 🔄 Inicialização segura da aplicação após o carregamento do DOM
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof window.initializeApp === "function") {
+        window.initializeApp();
+    } else {
+        console.error("❌ initializeApp ainda não está disponível — tentando novamente em 1s...");
+        setTimeout(() => {
+            if (typeof window.initializeApp === "function") window.initializeApp();
+            else console.error("⚠️ Falha ao carregar initializeApp após 1s.");
+        }, 1000);
+    }
+});
