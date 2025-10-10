@@ -552,63 +552,11 @@
                 <button id="todayBtn" onclick="goToToday()">Hoje</button>
                 <button class="btn-secondary" onclick="gerarRelatorio()" style="background: #4caf50; color: white; margin-left: 20px;">📄 Gerar Relatório</button>
             </div>
-            <div class="calendar-grid">
-                <div class="unit-calendar">
-                    <div class="unit-header">
-                        <h3>🏠 UN01</h3>
-                        <span class="reserva-count" id="count-UN01">0 reservas</span>
-                    </div>
-                    <div class="calendar-days">
-                        <div class="weekdays">
-                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-                        </div>
-                        <div class="days" id="days-UN01"></div>
-                    </div>
-                    <div class="legend-mini">
-                        <div><span class="dot entrada"></span>Entrada</div>
-                        <div><span class="dot saida"></span>Saída</div>
-                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
-                        <div><span class="dot hospedagem"></span>Hospedagem</div>
-                    </div>
-                </div>
-                <div class="unit-calendar">
-                    <div class="unit-header">
-                        <h3>🏠 UN02</h3>
-                        <span class="reserva-count" id="count-UN02">0 reservas</span>
-                    </div>
-                    <div class="calendar-days">
-                        <div class="weekdays">
-                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-                        </div>
-                        <div class="days" id="days-UN02"></div>
-                    </div>
-                    <div class="legend-mini">
-                        <div><span class="dot entrada"></span>Entrada</div>
-                        <div><span class="dot saida"></span>Saída</div>
-                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
-                        <div><span class="dot hospedagem"></span>Hospedagem</div>
-                    </div>
-                </div>
-                <div class="unit-calendar">
-                    <div class="unit-header">
-                        <h3>🏠 UN03</h3>
-                        <span class="reserva-count" id="count-UN03">0 reservas</span>
-                    </div>
-                    <div class="calendar-days">
-                        <div class="weekdays">
-                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-                        </div>
-                        <div class="days" id="days-UN03"></div>
-                    </div>
-                    <div class="legend-mini">
-                        <div><span class="dot entrada"></span>Entrada</div>
-                        <div><span class="dot saida"></span>Saída</div>
-                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
-                        <div><span class="dot hospedagem"></span>Hospedagem</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+            <div class="calendar-grid" id="calendar-grid">
+    <!-- Calendários serão gerados dinamicamente pelo JavaScript -->
+</div>
+
 
         <div class="tab-content" id="timeline">
             <div class="section-header">
@@ -698,9 +646,11 @@
                                 <label>Unidade *</label>
                                 <select id="unidade" required>
                                     <option value="">Selecione</option>
-                                    <option value="UN01">UN01</option>
-                                    <option value="UN02">UN02</option>
-                                    <option value="UN03">UN03</option>
+                                    <option value="A6">A6</option>
+<option value="A7">A7</option>
+<option value="A8">A8</option>
+<option value="A9">A9</option>
+
                                 </select>
                             </div>
                             <div class="form-group">
@@ -791,7 +741,7 @@
                     <h3>Importar Lista de Contatos</h3>
                     <p>Cole sua lista no formato: NOME-WHATSAPP-PAIS-TEMPO-UNIDADE-STATUS</p>
                     <p style="font-style: italic; color: #666; font-size: 0.85rem; margin-bottom: 15px;">
-                        Exemplo: JOÃO-5548999606725-Brasil-2526-UN01-Resv
+                        Exemplo: JOÃO-5548999606725-Brasil-2526-A6-Resv
                     </p>
                     <textarea id="importText" rows="10" placeholder="Cole aqui sua lista de contatos..."></textarea>
                     <div class="form-actions">
