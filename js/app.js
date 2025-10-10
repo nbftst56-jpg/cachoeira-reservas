@@ -1,330 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Reservas - Cachoeira do Bom Jesus</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-    <div class="container">
-        <header class="header">
-            <div class="header-content">
-                <div class="logo-icon">🏖️</div>
-                <div class="logo">
-                    <h1>Sistema de Reservas</h1>
-                    <p>Cachoeira do Bom Jesus - Temporada 2025/2026</p>
-                </div>
-            </div>
-        </header>
+// ============================================
+// Sistema de Reservas - Cachoeira do Bom Jesus
+// Versão Firebase/Firestore
+// ============================================
 
-        <nav class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('calendario')">📅 Calendário</button>
-            <button class="nav-tab" onclick="showTab('timeline')">📊 Timeline</button>
-            <button class="nav-tab" onclick="showTab('reservas')">🏠 Reservas</button>
-            <button class="nav-tab" onclick="showTab('contatos')">📞 Contatos</button>
-        </nav>
-
-        <div class="tab-content active" id="calendario">
-            <div class="calendar-header">
-                <button class="month-nav" onclick="changeMonth(-1)">‹</button>
-                <h2 id="currentMonth">Setembro 2025</h2>
-                <button class="month-nav" onclick="changeMonth(1)">›</button>
-                <button id="todayBtn" onclick="goToToday()">Hoje</button>
-                <button class="btn-secondary" onclick="gerarRelatorio()" style="background: #4caf50; color: white; margin-left: 20px;">📄 Gerar Relatório</button>
-            </div>
-            <div class="calendar-grid">
-                <div class="unit-calendar">
-                    <div class="unit-header">
-                        <h3>🏠 UN01</h3>
-                        <span class="reserva-count" id="count-UN01">0 reservas</span>
-                    </div>
-                    <div class="calendar-days">
-                        <div class="weekdays">
-                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-                        </div>
-                        <div class="days" id="days-UN01"></div>
-                    </div>
-                    <div class="legend-mini">
-                        <div><span class="dot entrada"></span>Entrada</div>
-                        <div><span class="dot saida"></span>Saída</div>
-                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
-                        <div><span class="dot hospedagem"></span>Hospedagem</div>
-                    </div>
-                </div>
-                <div class="unit-calendar">
-                    <div class="unit-header">
-                        <h3>🏠 UN02</h3>
-                        <span class="reserva-count" id="count-UN02">0 reservas</span>
-                    </div>
-                    <div class="calendar-days">
-                        <div class="weekdays">
-                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-                        </div>
-                        <div class="days" id="days-UN02"></div>
-                    </div>
-                    <div class="legend-mini">
-                        <div><span class="dot entrada"></span>Entrada</div>
-                        <div><span class="dot saida"></span>Saída</div>
-                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
-                        <div><span class="dot hospedagem"></span>Hospedagem</div>
-                    </div>
-                </div>
-                <div class="unit-calendar">
-                    <div class="unit-header">
-                        <h3>🏠 UN03</h3>
-                        <span class="reserva-count" id="count-UN03">0 reservas</span>
-                    </div>
-                    <div class="calendar-days">
-                        <div class="weekdays">
-                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-                        </div>
-                        <div class="days" id="days-UN03"></div>
-                    </div>
-                    <div class="legend-mini">
-                        <div><span class="dot entrada"></span>Entrada</div>
-                        <div><span class="dot saida"></span>Saída</div>
-                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
-                        <div><span class="dot hospedagem"></span>Hospedagem</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="timeline">
-            <div class="section-header">
-                <h2>Timeline de Reservas</h2>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <button class="month-nav" onclick="changeTimelineMonth(-1)">‹</button>
-                    <span id="timelineMonth" style="font-weight: bold; min-width: 150px; text-align: center;">Dezembro 2025</span>
-                    <button class="month-nav" onclick="changeTimelineMonth(1)">›</button>
-                    <button id="timelineTodayBtn" onclick="goToTimelineToday()" style="margin-left: 10px;">Hoje</button>
-                </div>
-            </div>
-            
-            <div id="timelineContainer" style="padding: 20px; overflow-x: auto;">
-                <!-- Timeline será renderizada aqui -->
-            </div>
-            
-            <div class="legend-mini" style="margin-top: 20px; padding: 0 20px;">
-                <div><span class="dot entrada"></span>Entrada</div>
-                <div><span class="dot saida"></span>Saída</div>
-                <div><span class="dot sobreposicao"></span>Sobreposição</div>
-                <div><span class="dot hospedagem"></span>Hospedagem</div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="reservas">
-            <div class="section-header">
-                <h2>Gerenciar Reservas</h2>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button class="btn-secondary" onclick="exportarBackup()" style="background: #4caf50; color: white;">📥 Exportar Backup</button>
-                    <button class="btn-secondary" onclick="showImportBackup()" style="background: #ff9800; color: white;">📤 Importar Backup</button>
-                    <button class="btn-secondary" onclick="limparTodosDados()" style="background: #f44336; color: white;">🗑️ Limpar Tudo</button>
-                    <button class="btn-primary" onclick="showReservaForm()">+ Nova Reserva</button>
-                </div>
-            </div>
-
-            <!-- Import Backup Form -->
-            <div class="form-container" id="importBackupForm" style="display: none;">
-                <div class="form-card">
-                    <h3>Importar Backup JSON</h3>
-                    <p>Selecione um arquivo de backup (.json) para restaurar os dados:</p>
-                    <input type="file" id="backupFile" accept=".json" style="margin: 15px 0; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; width: 100%;">
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="hideImportBackup()">Cancelar</button>
-                        <button type="button" class="btn-primary" onclick="importarBackup()">Importar Backup</button>
-                    </div>
-                </div>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number" id="total-reservas">0</span>
-                    <span class="stat-label">Total</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="confirmadas">0</span>
-                    <span class="stat-label">Confirmadas</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="reservadas">0</span>
-                    <span class="stat-label">Reservas</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="executadas">0</span>
-                    <span class="stat-label">Executadas</span>
-                </div>
-            </div>
-            <div class="form-container" id="reservaForm" style="display: none;">
-                <div class="form-card">
-                    <h3 id="formTitle">Nova Reserva</h3>
-                    <form id="reservaFormElement">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Nome do Cliente *</label>
-                                <div style="position: relative;">
-                                    <input type="text" id="nome" required placeholder="Digite o nome do cliente..." autocomplete="off">
-                                    <div id="nomeSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>WhatsApp</label>
-                                <input type="text" id="whatsapp" placeholder="5548999606725">
-                            </div>
-                            <div class="form-group">
-                                <label>País</label>
-                                <input type="text" id="pais" value="Brasil">
-                            </div>
-                            <div class="form-group">
-                                <label>Unidade *</label>
-                                <select id="unidade" required>
-                                    <option value="">Selecione</option>
-                                    <option value="UN01">UN01</option>
-                                    <option value="UN02">UN02</option>
-                                    <option value="UN03">UN03</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Check-in (14h) *</label>
-                                <input type="date" id="checkin" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Check-out (10h) *</label>
-                                <input type="date" id="checkout" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select id="status">
-                                    <option value="Resv">Reserva</option>
-                                    <option value="Conf">Confirmada</option>
-                                    <option value="Canc">Cancelada</option>
-                                    <option value="Exec">Executada</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Valor Total (R$)</label>
-                                <input type="number" id="valor" step="0.01" placeholder="0.00">
-                            </div>
-                            <div class="form-group">
-                                <label>Valor do Sinal (R$)</label>
-                                <input type="number" id="valorSinal" step="0.01" placeholder="0.00">
-                            </div>
-                            <div class="form-group">
-                                <label>Data do Pagamento</label>
-                                <input type="date" id="dataPagamento">
-                            </div>
-                            <div class="form-group">
-                                <label>Forma de Pagamento</label>
-                                <select id="formaPagamento">
-                                    <option value="">Selecione</option>
-                                    <option value="Dinheiro">Dinheiro</option>
-                                    <option value="PIX">PIX</option>
-                                    <option value="Cartão Crédito">Cartão de Crédito</option>
-                                    <option value="Cartão Débito">Cartão de Débito</option>
-                                    <option value="Transferência">Transferência Bancária</option>
-                                    <option value="Boleto">Boleto</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Observações</label>
-                            <textarea id="observacoes" rows="3" placeholder="Informações adicionais..."></textarea>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn-secondary" onclick="hideReservaForm()">Cancelar</button>
-                            <button type="submit" class="btn-primary">Salvar Reserva</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Unidade</th>
-                            <th>Check-in</th>
-                            <th>Check-out</th>
-                            <th>Status</th>
-                            <th>Valor</th>
-                            <th>Sinal</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reservasTable">
-                        <tr>
-                            <td colspan="7" style="text-align: center; color: #666; padding: 40px;">
-                                Nenhuma reserva cadastrada. Clique em "+ Nova Reserva" para começar.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="tab-content" id="contatos">
-            <div class="section-header">
-                <h2>Lista de Contatos</h2>
-                <button class="btn-primary" onclick="showImportForm()">📋 Importar Lista</button>
-            </div>
-            <div class="form-container" id="importForm" style="display: none;">
-                <div class="form-card">
-                    <h3>Importar Lista de Contatos</h3>
-                    <p>Cole sua lista no formato: NOME-WHATSAPP-PAIS-TEMPO-UNIDADE-STATUS</p>
-                    <p style="font-style: italic; color: #666; font-size: 0.85rem; margin-bottom: 15px;">
-                        Exemplo: JOÃO-5548999606725-Brasil-2526-UN01-Resv
-                    </p>
-                    <textarea id="importText" rows="10" placeholder="Cole aqui sua lista de contatos..."></textarea>
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="hideImportForm()">Cancelar</button>
-                        <button type="button" class="btn-primary" onclick="importContatos()">Importar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number" id="total-contatos">0</span>
-                    <span class="stat-label">Total Contatos</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="com-whatsapp">0</span>
-                    <span class="stat-label">Com WhatsApp</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="aguardando">0</span>
-                    <span class="stat-label">Aguardando</span>
-                </div>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>WhatsApp</th>
-                            <th>País</th>
-                            <th>Tempo</th>
-                            <th>Unidade Pref.</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="contatosTable">
-                        <tr>
-                            <td colspan="7" style="text-align: center; color: #666; padding: 40px;">
-                                Nenhum contato cadastrado. Use o botão "Importar Lista" para adicionar contatos.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <script>
         let currentMonth = new Date();
         let currentTimelineMonth = new Date();
-        let reservas = [];
-        let contatos = [];
+        // reservas vem de window.reservas (firestore.js)
+        // contatos vem de window.contatos (firestore.js)
         let currentEditingId = null;
 
         // Função auxiliar para fazer parsing correto de datas sem problemas de timezone
@@ -337,23 +19,22 @@
             return new Date(year, month, day);
         }
 
-        function loadData() {
+        async function loadData() {
             try {
-                const reservasData = localStorage.getItem('reservas');
-                const contatosData = localStorage.getItem('contatos');
-                reservas = reservasData ? JSON.parse(reservasData) : [];
-                contatos = contatosData ? JSON.parse(contatosData) : [];
-                reservas = reservas.filter(r => r && r.id && r.nome && r.unidade);
-                contatos = contatos.filter(c => c && c.id && c.nome);
-                reservas.forEach(r => r.valor = parseFloat(r.valor) || 0);
+                await window.loadAllData();
+                reservas = window.reservas;
+                contatos = window.contatos;
+                limpezas = window.limpezas || [];
+                manutencoes = window.manutencoes || [];
             } catch (error) {
                 console.error('Erro ao carregar dados:', error);
-                reservas = []; contatos = [];
+                alert('Erro ao carregar dados do servidor.');
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData();
+        // Initialize app (called from auth.js after authentication)
+        window.initializeApp = async function() {
+            await loadData();
             updateCalendar();
             renderTimeline();
             updateStats();
@@ -1165,16 +846,436 @@
             printWindow.document.write('</head><body>');
             printWindow.document.write('<pre>' + relatorio + '</pre>');
             printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 250);
+        }
 
-    <!-- Tooltip element -->
-    <div id="tooltip" class="tooltip"></div>
+        function showReservaForm() {
+            document.getElementById('reservaForm').style.display = 'block';
+            document.getElementById('reservaFormElement').reset();
+            document.getElementById('pais').value = 'Brasil';
+            document.getElementById('status').value = 'Resv';
+            document.getElementById('formTitle').textContent = 'Nova Reserva';
+            currentEditingId = null;
+            
+            // Esconder sugestões do autocomplete
+            document.getElementById('nomeSuggestions').style.display = 'none';
+            
+            document.getElementById('reservaForm').scrollIntoView({ behavior: 'smooth' });
+            
+            // Focar no campo nome após um pequeno delay
+            setTimeout(() => {
+                document.getElementById('nome').focus();
+            }, 300);
+        }
 
-    <!-- Firebase SDK (v10.7.1) -->
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/firestore.js"></script>
-    
-    <!-- App Logic -->
-    <script src="js/app.js"></script>
-</body>
-</html>
+        function hideReservaForm() {
+            document.getElementById('reservaForm').style.display = 'none';
+            currentEditingId = null;
+        }
+
+        function handleReservaSubmit(event) {
+            event.preventDefault();
+            try {
+                const formData = {
+                    id: currentEditingId || Date.now(),
+                    nome: document.getElementById('nome').value.trim(),
+                    whatsapp: document.getElementById('whatsapp').value.trim(),
+                    pais: document.getElementById('pais').value.trim(),
+                    unidade: document.getElementById('unidade').value,
+                    checkin: document.getElementById('checkin').value,
+                    checkout: document.getElementById('checkout').value,
+                    status: document.getElementById('status').value,
+                    valor: parseFloat(document.getElementById('valor').value) || 0,
+                    valorSinal: parseFloat(document.getElementById('valorSinal').value) || 0,
+                    dataPagamento: document.getElementById('dataPagamento').value,
+                    formaPagamento: document.getElementById('formaPagamento').value,
+                    observacoes: document.getElementById('observacoes').value.trim()
+                };
+                if (!formData.nome) { alert('Nome do cliente é obrigatório!'); return; }
+                if (!formData.unidade) { alert('Selecione uma unidade!'); return; }
+                if (!formData.checkin || !formData.checkout) { alert('Datas de check-in e check-out são obrigatórias!'); return; }
+                if (parseDate(formData.checkout) <= parseDate(formData.checkin)) { alert('A data de check-out deve ser posterior ao check-in!'); return; }
+                const conflictResult = checkReservationConflicts(formData, currentEditingId);
+                if (!conflictResult.valid) { alert(conflictResult.message); return; }
+                // Save to Firestore
+                if (currentEditingId) {
+                    await window.updateReserva(currentEditingId, formData);
+                } else {
+                    await window.addReserva(formData);
+                }
+                updateReservasTable();
+                updateStats();
+                updateCalendar();
+                hideReservaForm();
+                alert('Reserva salva com sucesso!');
+            } catch (error) {
+                console.error('Erro ao salvar reserva:', error);
+                alert('Erro ao salvar reserva. Tente novamente.');
+            }
+        }
+
+        function checkReservationConflicts(newReserva, editingId = null) {
+            const checkinDate = parseDate(newReserva.checkin);
+            const checkoutDate = parseDate(newReserva.checkout);
+            const conflictingReservas = reservas.filter(reserva => {
+                return reserva.unidade === newReserva.unidade && reserva.status !== 'Canc' && reserva.id !== editingId;
+            });
+            for (let existingReserva of conflictingReservas) {
+                const existingCheckin = parseDate(existingReserva.checkin);
+                const existingCheckout = parseDate(existingReserva.checkout);
+                const hasOverlap = !(checkoutDate < existingCheckin || checkinDate > existingCheckout);
+                if (hasOverlap) {
+                    const sameCheckoutCheckinDate = isSameDay(checkoutDate, existingCheckin) || isSameDay(checkinDate, existingCheckout);
+                    if (!sameCheckoutCheckinDate) {
+                        return {
+                            valid: false,
+                            message: `CONFLITO: A reserva de "${newReserva.nome}" conflita com "${existingReserva.nome}" na ${newReserva.unidade}.\n\nSó é permitida sobreposição quando um cliente sai às 10h e outro entra às 14h no mesmo dia.`
+                        };
+                    }
+                }
+            }
+            return { valid: true };
+        }
+
+        function isSameDay(date1, date2) {
+            return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+        }
+
+        function updateReservasTable() {
+            const tbody = document.getElementById('reservasTable');
+            tbody.innerHTML = '';
+            if (reservas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #666; padding: 40px;">Nenhuma reserva cadastrada. Clique em "+ Nova Reserva" para começar.</td></tr>';
+                return;
+            }
+            reservas.forEach(reserva => {
+                const valor = typeof reserva.valor === 'number' ? reserva.valor : parseFloat(reserva.valor) || 0;
+                const valorSinal = typeof reserva.valorSinal === 'number' ? reserva.valorSinal : parseFloat(reserva.valorSinal) || 0;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${reserva.nome || 'Nome não informado'}</td>
+                    <td>${reserva.unidade || '-'}</td>
+                    <td>${formatDate(reserva.checkin)}</td>
+                    <td>${formatDate(reserva.checkout)}</td>
+                    <td><span class="status-badge status-${(reserva.status || 'resv').toLowerCase()}">${getStatusText(reserva.status)}</span></td>
+                    <td>R$ ${valor.toFixed(2)}</td>
+                    <td>${valorSinal > 0 ? 'R$ ' + valorSinal.toFixed(2) : '-'}</td>
+                    <td>
+                        <button class="btn-secondary" onclick="editReserva(${reserva.id})" style="margin-right: 5px; padding: 4px 8px; font-size: 0.8rem;">Editar</button>
+                        <button class="btn-secondary" onclick="deleteReserva(${reserva.id})" style="background: #f44336; color: white; padding: 4px 8px; font-size: 0.8rem;">Excluir</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateStats() {
+            const total = reservas.length;
+            const confirmadas = reservas.filter(r => r.status === 'Conf').length;
+            const reservadas = reservas.filter(r => r.status === 'Resv').length;
+            const executadas = reservas.filter(r => r.status === 'Exec').length;
+            document.getElementById('total-reservas').textContent = total;
+            document.getElementById('confirmadas').textContent = confirmadas;
+            document.getElementById('reservadas').textContent = reservadas;
+            document.getElementById('executadas').textContent = executadas;
+        }
+
+        function showImportForm() { document.getElementById('importForm').style.display = 'block'; }
+        function hideImportForm() { document.getElementById('importForm').style.display = 'none'; }
+
+        function importContatos() {
+            const text = document.getElementById('importText').value.trim();
+            if (!text) { alert('Cole a lista de contatos antes de importar.'); return; }
+            const lines = text.split('\n').filter(line => line.trim());
+            let imported = 0;
+            let duplicados = 0;
+            let erros = [];
+            
+            lines.forEach((line, index) => {
+                const parts = line.trim().split('-');
+                if (parts.length >= 6) {
+                    const nomeNovo = parts[0].trim().toLowerCase();
+                    const whatsappNovo = parts[1].trim();
+                    
+                    // Verificar duplicados mais rigorosa
+                    const jaExiste = contatos.find(c => 
+                        c.nome.toLowerCase() === nomeNovo || 
+                        (c.whatsapp === whatsappNovo && whatsappNovo !== '')
+                    );
+                    
+                    if (!jaExiste) {
+                        const contato = {
+                            id: Date.now() + Math.random() + index,
+                            nome: parts[0].trim(),
+                            whatsapp: parts[1].trim(),
+                            pais: parts[2].trim(),
+                            tempo: parts[3].trim(),
+                            unidade: parts[4].trim(),
+                            status: parts[5].trim()
+                        };
+                        contatos.push(contato);
+                        imported++;
+                    } else {
+                        duplicados++;
+                    }
+                } else {
+                    erros.push(`Linha ${index + 1}: "${line.trim()}" - Formato inválido`);
+                }
+            });
+            
+            // Removed localStorage - using Firestore
+            updateContatosTable();
+            updateContatosStats();
+            hideImportForm();
+            document.getElementById('importText').value = '';
+            
+            let message = `Importação concluída:\n✅ ${imported} novos contatos\n🔄 ${duplicados} duplicados ignorados`;
+            if (erros.length > 0) {
+                message += `\n❌ ${erros.length} erros encontrados:\n${erros.slice(0, 5).join('\n')}`;
+                if (erros.length > 5) message += `\n... e mais ${erros.length - 5} erros.`;
+            }
+            alert(message);
+        }
+
+        function updateContatosTable() {
+            const tbody = document.getElementById('contatosTable');
+            tbody.innerHTML = '';
+            if (contatos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #666; padding: 40px;">Nenhum contato cadastrado. Use o botão "Importar Lista" para adicionar contatos.</td></tr>';
+                return;
+            }
+            contatos.forEach(contato => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${contato.nome}</td>
+                    <td>${contato.whatsapp || '-'}</td>
+                    <td>${contato.pais}</td>
+                    <td>${contato.tempo}</td>
+                    <td>${contato.unidade}</td>
+                    <td><span class="status-badge status-${(contato.status || 'aguardando').toLowerCase()}">${getStatusText(contato.status)}</span></td>
+                    <td><button class="btn-secondary" onclick="deleteContato('${contato.id}')" style="background: #f44336; color: white; padding: 4px 8px; font-size: 0.8rem;">Excluir</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateContatosStats() {
+            const total = contatos.length;
+            const comWhatsapp = contatos.filter(c => c.whatsapp && c.whatsapp.trim()).length;
+            const aguardando = contatos.filter(c => c.status === 'Aguardando').length;
+            document.getElementById('total-contatos').textContent = total;
+            document.getElementById('com-whatsapp').textContent = comWhatsapp;
+            document.getElementById('aguardando').textContent = aguardando;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Data inválida';
+            try { 
+                // CORREÇÃO: Não adicionar hora, usar diretamente a data
+                const parts = dateString.split('-');
+                const year = parseInt(parts[0]);
+                const month = parseInt(parts[1]) - 1;
+                const day = parseInt(parts[2]);
+                const date = new Date(year, month, day);
+                return date.toLocaleDateString('pt-BR');
+            }
+            catch (error) { 
+                console.error('Erro ao formatar data:', dateString, error);
+                return 'Data inválida'; 
+            }
+        }
+
+        function getStatusText(status) {
+            const statusMap = { 'Resv': 'Reserva', 'Conf': 'Confirmada', 'Canc': 'Cancelada', 'Exec': 'Executada', 'Aguardando': 'Aguardando' };
+            return statusMap[status] || 'Reserva';
+        }
+
+        function editReserva(id) {
+            const reserva = reservas.find(r => r.id == id); // Usar == para comparação flexível
+            if (!reserva) {
+                alert('Reserva não encontrada!');
+                return;
+            }
+            
+            document.getElementById('nome').value = reserva.nome || '';
+            document.getElementById('whatsapp').value = reserva.whatsapp || '';
+            document.getElementById('pais').value = reserva.pais || 'Brasil';
+            document.getElementById('unidade').value = reserva.unidade || '';
+            document.getElementById('checkin').value = reserva.checkin || '';
+            document.getElementById('checkout').value = reserva.checkout || '';
+            document.getElementById('status').value = reserva.status || 'Resv';
+            document.getElementById('valor').value = reserva.valor || 0;
+            document.getElementById('valorSinal').value = reserva.valorSinal || 0;
+            document.getElementById('dataPagamento').value = reserva.dataPagamento || '';
+            document.getElementById('formaPagamento').value = reserva.formaPagamento || '';
+            document.getElementById('observacoes').value = reserva.observacoes || '';
+            
+            currentEditingId = id;
+            document.getElementById('formTitle').textContent = 'Editar Reserva';
+            document.getElementById('reservaForm').style.display = 'block';
+            document.getElementById('reservaForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteReserva(id) {
+            if (confirm('Tem certeza que deseja excluir esta reserva?')) {
+                const index = reservas.findIndex(r => r.id == id); // Usar == para comparação flexível
+                if (index === -1) {
+                    alert('Reserva não encontrada!');
+                    return;
+                }
+                
+                reservas.splice(index, 1); // Usar splice em vez de filter
+                // Removed localStorage - using Firestore
+                updateReservasTable();
+                updateStats();
+                updateCalendar();
+                alert('Reserva excluída com sucesso!');
+            }
+        }
+
+        function deleteContato(id) {
+            if (confirm('Tem certeza que deseja excluir este contato?')) {
+                const index = contatos.findIndex(c => c.id == id); // Usar == para comparação flexível
+                if (index === -1) {
+                    alert('Contato não encontrado!');
+                    return;
+                }
+                
+                contatos.splice(index, 1); // Usar splice em vez de filter
+                // Removed localStorage - using Firestore
+                updateContatosTable();
+                updateContatosStats();
+                alert('Contato excluído com sucesso!');
+            }
+        }
+
+        // Funções de Backup e Limpeza
+        function exportarBackup() {
+            try {
+                const backup = {
+                    versao: '1.0',
+                    data: new Date().toISOString(),
+                    reservas: reservas,
+                    contatos: contatos,
+                    totalReservas: reservas.length,
+                    totalContatos: contatos.length
+                };
+                
+                const dataStr = JSON.stringify(backup, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `backup-cachoeira-${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                alert('Backup exportado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao exportar backup:', error);
+                alert('Erro ao exportar backup. Tente novamente.');
+            }
+        }
+
+        function showImportBackup() {
+            document.getElementById('importBackupForm').style.display = 'block';
+        }
+
+        function hideImportBackup() {
+            document.getElementById('importBackupForm').style.display = 'none';
+            document.getElementById('backupFile').value = '';
+        }
+
+        function importarBackup() {
+            const fileInput = document.getElementById('backupFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Selecione um arquivo de backup!');
+                return;
+            }
+            
+            if (!file.name.endsWith('.json')) {
+                alert('Por favor, selecione um arquivo JSON válido!');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    
+                    // Validar estrutura do backup
+                    if (!backup.reservas || !backup.contatos) {
+                        alert('Arquivo de backup inválido! Estrutura não reconhecida.');
+                        return;
+                    }
+                    
+                    if (confirm(`Importar backup de ${backup.data ? new Date(backup.data).toLocaleDateString('pt-BR') : 'data desconhecida'}?\n\nReservas: ${backup.totalReservas || backup.reservas.length}\nContatos: ${backup.totalContatos || backup.contatos.length}\n\n⚠️ ATENÇÃO: Isso substituirá todos os dados atuais!`)) {
+                        
+                        reservas = Array.isArray(backup.reservas) ? backup.reservas : [];
+                        contatos = Array.isArray(backup.contatos) ? backup.contatos : [];
+                        
+                        // Validar dados importados
+                        reservas = reservas.filter(r => r && r.id && r.nome && r.unidade);
+                        contatos = contatos.filter(c => c && c.id && c.nome);
+                        
+                        // Salvar no localStorage
+                        // Removed localStorage - using Firestore
+                        // Removed localStorage - using Firestore
+                        
+                        // Atualizar interface
+                        updateCalendar();
+                        updateReservasTable();
+                        updateStats();
+                        updateContatosTable();
+                        updateContatosStats();
+                        
+                        hideImportBackup();
+                        alert(`Backup importado com sucesso!\n\n✅ ${reservas.length} reservas\n✅ ${contatos.length} contatos`);
+                    }
+                    
+                } catch (error) {
+                    console.error('Erro ao importar backup:', error);
+                    alert('Erro ao ler o arquivo de backup. Verifique se é um arquivo JSON válido.');
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function limparTodosDados() {
+            if (confirm('⚠️ ATENÇÃO: Esta ação irá APAGAR TODOS OS DADOS!\n\n• Todas as reservas\n• Todos os contatos\n• Configurações\n\nEsta ação NÃO PODE SER DESFEITA!\n\nTem certeza que deseja continuar?')) {
+                if (confirm('ÚLTIMA CONFIRMAÇÃO:\n\nApagar PERMANENTEMENTE todos os dados?')) {
+                    
+                    // Limpar arrays
+                    reservas = [];
+                    contatos = [];
+                    currentEditingId = null;
+                    
+                    // Limpar localStorage
+                    // Removed localStorage - using Firestore
+                    // Removed localStorage - using Firestore
+                    
+                    // Atualizar interface
+                    updateCalendar();
+                    updateReservasTable();
+                    updateStats();
+                    updateContatosTable();
+                    updateContatosStats();
+                    
+                    // Esconder formulários abertos
+                    hideReservaForm();
+                    hideImportForm();
+                    hideImportBackup();
+                    
+                    alert('✅ Todos os dados foram apagados com sucesso!');
+                }
+            }
+        }

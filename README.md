@@ -1,79 +1,170 @@
-# 🏖️ Sistema de Reservas - Versão Firebase
+# 🏖️ Sistema de Reservas - Cachoeira do Bom Jesus
 
-## 📋 Arquivos do Projeto
+Sistema completo de gerenciamento de reservas para temporada 2025/2026 com Firebase/Firestore.
 
-- `index.html` - Página de login
-- `app.html` - Sistema principal (em desenvolvimento)
-- `README.md` - Este arquivo
+## 📋 Funcionalidades
 
-## 🚀 Como Usar Localmente
+### ✅ Gestão de Reservas
+- Calendário visual com 3 unidades (UN01, UN02, UN03)
+- Timeline horizontal para visualização rápida
+- Campos completos: Cliente, WhatsApp, País, Check-in/out, Valor, Sinal, Pagamento
+- Detecção automática de sobreposições
+- Tooltip com informações ao passar o mouse
+- Autocomplete de clientes cadastrados
 
-### 1. Abrir o Sistema
+### ✅ Gestão de Contatos
+- Cadastro completo de clientes
+- Histórico de reservas por cliente
+- Busca e filtros
 
-Basta abrir o arquivo `index.html` em um navegador moderno:
+### ✅ Limpeza e Manutenção
+- Registro de limpezas por unidade
+- Controle de manutenções e custos
+- Histórico completo
 
-```bash
-# No navegador, abra:
-file:///caminho/para/cachoeira-firebase/index.html
+### ✅ Relatórios
+- Relatório TXT formatado
+- Disponibilidade da temporada (Nov/25 - Mai/26)
+- Tabela compacta com ocupação por mês
+- Download e impressão
+
+### ✅ Firebase/Firestore
+- Autenticação segura
+- Dados sincronizados na nuvem
+- Backup automático
+- Acesso de múltiplos dispositivos
+- Sincronização em tempo real
+
+### ✅ Responsivo
+- Funciona em desktop, tablet e smartphone
+- Interface adaptativa
+- Touch-optimized
+
+## 📁 Estrutura do Projeto
+
+```
+cachoeira-firebase-completo/
+├── index.html              # Página de login
+├── app.html                # Sistema principal
+├── css/
+│   └── styles.css          # Todos os estilos (522 linhas)
+├── js/
+│   ├── firebase-config.js  # Configuração Firebase
+│   ├── auth.js             # Autenticação
+│   ├── firestore.js        # Operações banco de dados
+│   └── app.js              # Lógica do sistema (1281 linhas)
+└── README.md               # Este arquivo
 ```
 
-### 2. Fazer Login
+## 🚀 Como Fazer Deploy
 
-Use as credenciais que você criou no Firebase Console:
-- Email: seu-email@exemplo.com
-- Senha: sua-senha
+### Opção 1: GitHub + Netlify (Recomendado)
 
-### 3. Usar o Sistema
+#### 1. Upload para GitHub
 
-Após o login, você será redirecionado para `app.html` onde poderá:
-- Gerenciar reservas
-- Visualizar calendário
-- Adicionar contatos
-- Tudo sincronizado na nuvem!
+1. Acesse [github.com](https://github.com)
+2. Clique em **"+"** → **"New repository"**
+3. Nome: `cachoeira-reservas`
+4. Visibilidade: **Private** (recomendado)
+5. Clique em **"Create repository"**
 
-## ☁️ Deploy para Produção
+6. **Upload dos arquivos:**
+   - Clique em **"uploading an existing file"**
+   - Arraste TODOS os arquivos e pastas:
+     - `index.html`
+     - `app.html`
+     - Pasta `css/` (com styles.css dentro)
+     - Pasta `js/` (com todos os 4 arquivos .js dentro)
+     - `README.md`
+   - Clique em **"Commit changes"**
 
-### Opção 1: Firebase Hosting (Recomendado)
+#### 2. Deploy no Netlify
+
+1. Acesse [netlify.com](https://netlify.com)
+2. Clique em **"Sign up with GitHub"**
+3. Autorize o Netlify
+4. Clique em **"Add new site"** → **"Import an existing project"**
+5. Escolha **"GitHub"**
+6. Selecione o repositório **"cachoeira-reservas"**
+7. Configurações:
+   - **Build command:** (deixe vazio)
+   - **Publish directory:** `.` (ponto)
+8. Clique em **"Deploy site"**
+9. Aguarde 1-2 minutos
+10. **Pronto!** Copie a URL gerada
+
+#### 3. Personalizar URL (Opcional)
+
+1. No Netlify, vá em **"Site settings"**
+2. Clique em **"Change site name"**
+3. Digite: `cachoeira-reservas`
+4. Sua URL será: `https://cachoeira-reservas.netlify.app`
+
+---
+
+### Opção 2: Firebase Hosting
+
+#### 1. Instalar Firebase CLI
 
 ```bash
-# 1. Instalar Firebase CLI
 npm install -g firebase-tools
+```
 
-# 2. Login no Firebase
+#### 2. Login
+
+```bash
 firebase login
+```
 
-# 3. Inicializar projeto
+#### 3. Inicializar
+
+```bash
+cd cachoeira-firebase-completo
 firebase init hosting
+```
 
-# Escolha:
-# - Use an existing project: cachoeira-reservas
-# - Public directory: . (ponto)
-# - Configure as single-page app: No
-# - Set up automatic builds: No
+Respostas:
+- Projeto: **cachoeira-reservas** (selecione o existente)
+- Public directory: **`.`** (ponto)
+- Single-page app: **N** (não)
+- GitHub: **N** (não)
 
-# 4. Deploy
+#### 4. Deploy
+
+```bash
 firebase deploy --only hosting
 ```
 
-Seu site estará em: `https://cachoeira-reservas.web.app`
+#### 5. Acessar
 
-### Opção 2: Netlify (Alternativa Simples)
+URL: `https://cachoeira-reservas.web.app`
 
-1. Acesse: https://app.netlify.com
-2. Arraste a pasta `cachoeira-firebase` para o Netlify
-3. Pronto! URL gerada automaticamente
+---
 
-### Opção 3: Vercel (Alternativa Rápida)
+## 🔐 Configuração Inicial
 
-1. Acesse: https://vercel.com
-2. Importe o projeto
-3. Deploy automático
+### 1. Criar Primeiro Usuário
 
-## 🔐 Segurança
+1. Acesse: [Firebase Console](https://console.firebase.google.com)
+2. Selecione o projeto **"cachoeira-reservas"**
+3. Vá em **"Authentication"** → **"Users"**
+4. Clique em **"Add user"**
+5. Digite:
+   - Email: seu-email@exemplo.com
+   - Senha: (mínimo 6 caracteres)
+6. Clique em **"Add user"**
 
-### Regras do Firestore
+### 2. Primeiro Acesso
 
-As regras já estão configuradas para permitir acesso apenas a usuários autenticados:
+1. Abra a URL do seu site
+2. Faça login com o email e senha criados
+3. Pronto! Sistema funcionando
+
+---
+
+## 📊 Regras de Segurança do Firestore
+
+As regras já estão configuradas no Firebase Console, mas se precisar verificar:
 
 ```javascript
 rules_version = '2';
@@ -86,129 +177,123 @@ service cloud.firestore {
 }
 ```
 
-### Adicionar Novos Usuários
-
-1. Acesse: https://console.firebase.google.com
-2. Vá para Authentication > Users
-3. Clique em "Add user"
-4. Digite email e senha
-5. Pronto!
-
-## 📊 Estrutura do Banco de Dados
-
-### Coleções:
-
-#### `reservas`
-```javascript
-{
-  id: "timestamp",
-  cliente: "Nome do Cliente",
-  whatsapp: "(71) 98765-4321",
-  pais: "Brasil",
-  email: "cliente@email.com",
-  unidade: "UN01",
-  checkin: "2025-12-01",
-  checkout: "2025-12-10",
-  status: "Confirmada",
-  valor: 5000.00,
-  valorSinal: 1500.00,
-  dataPagamento: "2025-11-15",
-  formaPagamento: "PIX",
-  observacoes: "Cliente preferencial",
-  createdAt: timestamp,
-  updatedAt: timestamp
-}
-```
-
-#### `contatos`
-```javascript
-{
-  id: "timestamp",
-  nome: "Nome do Contato",
-  whatsapp: "(71) 98765-4321",
-  pais: "Brasil",
-  email: "contato@email.com",
-  observacoes: "Notas adicionais",
-  createdAt: timestamp,
-  updatedAt: timestamp
-}
-```
-
-## 🔄 Sincronização
-
-- **Tempo Real**: Mudanças aparecem instantaneamente
-- **Offline**: Funciona offline e sincroniza quando voltar online
-- **Multi-dispositivo**: Acesse de qualquer lugar
-
-## 💾 Backup
-
-**Não é mais necessário fazer backup manual!**
-
-✅ Todos os dados estão seguros no Firebase  
-✅ Backup automático do Google  
-✅ Histórico de versões  
-✅ Recuperação de desastres  
-
-## 🐛 Solução de Problemas
-
-### Erro: "User not found"
-- Verifique se criou o usuário no Firebase Console
-- Confirme o email digitado
-
-### Erro: "Wrong password"
-- Verifique a senha
-- Senha deve ter no mínimo 6 caracteres
-
-### Erro: "Network error"
-- Verifique sua conexão com a internet
-- Verifique se o Firebase está configurado corretamente
-
-### Página em branco após login
-- Abra o Console do navegador (F12)
-- Verifique se há erros
-- Confirme que app.html está na mesma pasta
-
-## 📱 Compatibilidade
-
-### Navegadores Suportados:
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
-
-### Dispositivos:
-- ✅ Desktop (Windows, Mac, Linux)
-- ✅ Tablets (Android, iPad)
-- ✅ Smartphones (Android, iPhone)
-
-## 🆘 Suporte
-
-Para dúvidas ou problemas:
-1. Verifique este README
-2. Consulte a documentação do Firebase: https://firebase.google.com/docs
-3. Verifique o Console do navegador para erros
-
-## 📝 Notas de Versão
-
-### Versão 1.0 (Firebase)
-- ✅ Autenticação com email/senha
-- ✅ Banco de dados Firestore
-- ✅ Sincronização em tempo real
-- ✅ CRUD de reservas
-- ✅ CRUD de contatos
-- ✅ Calendário visual
-- ✅ Responsivo (mobile-friendly)
-
-## 🔮 Próximas Funcionalidades
-
-- [ ] Timeline de reservas
-- [ ] Gestão de limpeza e manutenção
-- [ ] Relatórios em PDF
-- [ ] Notificações push
-- [ ] App mobile nativo
+Isso significa:
+- ✅ Apenas usuários autenticados podem acessar
+- ✅ Cada usuário vê apenas seus próprios dados
+- ✅ Seguro e privado
 
 ---
 
-**Desenvolvido para Cachoeira do Bom Jesus**  
+## 🔄 Migração de Dados (Se Tiver Versão Offline)
+
+### 1. Exportar da Versão Offline
+
+1. Abra a versão offline no navegador
+2. Vá em **"Reservas"**
+3. Clique em **"📥 Exportar Backup"**
+4. Salve o arquivo JSON
+
+### 2. Importar na Versão Firebase
+
+**Método Manual (Recomendado para poucos dados):**
+1. Abra o arquivo JSON exportado
+2. Copie os dados de cada reserva
+3. Adicione manualmente na versão Firebase
+
+**Método Automático (Para muitos dados):**
+- Entre em contato para criar script de importação
+
+---
+
+## 💡 Dicas de Uso
+
+### Calendário
+- **Verde**: Dia de entrada (check-in)
+- **Azul**: Hospedagem (dias intermediários)
+- **Laranja**: Dia de saída (check-out)
+- **Roxo**: Sobreposição (saída + entrada no mesmo dia)
+- **Cinza**: Livre
+
+### Timeline
+- Visualização horizontal das 3 unidades
+- Navegar entre meses com ‹ e ›
+- Passar mouse para ver detalhes
+
+### Relatórios
+- Gera TXT com disponibilidade completa da temporada
+- Tabela compacta (Nov/25 - Mai/26)
+- Formato ASCII (funciona em celular)
+
+### Backup
+- Dados ficam na nuvem (Firebase)
+- Backup automático
+- Acesse de qualquer dispositivo
+
+---
+
+## 🆘 Solução de Problemas
+
+### Erro: "Permission denied"
+- **Causa:** Usuário não autenticado
+- **Solução:** Faça login novamente
+
+### Erro: "Failed to load data"
+- **Causa:** Sem conexão com internet
+- **Solução:** Verifique sua conexão
+
+### Dados não aparecem
+- **Causa:** Firestore vazio (primeira vez)
+- **Solução:** Normal! Adicione a primeira reserva
+
+### Não consigo fazer login
+- **Causa:** Usuário não criado no Firebase
+- **Solução:** Crie o usuário no Firebase Console
+
+---
+
+## 📱 Suporte
+
+### Navegadores Suportados
+- ✅ Chrome/Edge (recomendado)
+- ✅ Firefox
+- ✅ Safari
+- ✅ Mobile (iOS/Android)
+
+### Requisitos
+- Conexão com internet
+- Navegador moderno (2020+)
+- JavaScript habilitado
+
+---
+
+## 🎯 Próximos Passos
+
+Após o deploy:
+
+1. ✅ Crie seu usuário no Firebase
+2. ✅ Faça login no sistema
+3. ✅ Adicione sua primeira reserva
+4. ✅ Teste em diferentes dispositivos
+5. ✅ Compartilhe a URL (se quiser dar acesso a outros)
+
+---
+
+## 📄 Licença
+
+Projeto privado - Cachoeira do Bom Jesus
+
+---
+
+## 🎉 Pronto!
+
+Seu sistema está completo e pronto para uso!
+
+**URL após deploy:** `https://cachoeira-reservas.netlify.app` (ou Firebase)
+
+**Dúvidas?** Consulte os guias na pasta ou entre em contato.
+
+---
+
+**Desenvolvido com ❤️ para Cachoeira do Bom Jesus**
 **Temporada 2025/2026** 🏖️
 
