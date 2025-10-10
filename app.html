@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Reservas - Cachoeira do Bom Jesus</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-icon">🏖️</div>
+                <div class="logo">
+                    <h1>Sistema de Reservas</h1>
+                    <p>Cachoeira do Bom Jesus - Temporada 2025/2026</p>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('calendario')">📅 Calendário</button>
+            <button class="nav-tab" onclick="showTab('timeline')">📊 Timeline</button>
+            <button class="nav-tab" onclick="showTab('reservas')">🏠 Reservas</button>
+            <button class="nav-tab" onclick="showTab('contatos')">📞 Contatos</button>
+        </nav>
+
+        <div class="tab-content active" id="calendario">
+            <div class="calendar-header">
+                <button class="month-nav" onclick="changeMonth(-1)">‹</button>
+                <h2 id="currentMonth">Setembro 2025</h2>
+                <button class="month-nav" onclick="changeMonth(1)">›</button>
+                <button id="todayBtn" onclick="goToToday()">Hoje</button>
+                <button class="btn-secondary" onclick="gerarRelatorio()" style="background: #4caf50; color: white; margin-left: 20px;">📄 Gerar Relatório</button>
+            </div>
+            <div class="calendar-grid">
+                <div class="unit-calendar">
+                    <div class="unit-header">
+                        <h3>🏠 UN01</h3>
+                        <span class="reserva-count" id="count-UN01">0 reservas</span>
+                    </div>
+                    <div class="calendar-days">
+                        <div class="weekdays">
+                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+                        </div>
+                        <div class="days" id="days-UN01"></div>
+                    </div>
+                    <div class="legend-mini">
+                        <div><span class="dot entrada"></span>Entrada</div>
+                        <div><span class="dot saida"></span>Saída</div>
+                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
+                        <div><span class="dot hospedagem"></span>Hospedagem</div>
+                    </div>
+                </div>
+                <div class="unit-calendar">
+                    <div class="unit-header">
+                        <h3>🏠 UN02</h3>
+                        <span class="reserva-count" id="count-UN02">0 reservas</span>
+                    </div>
+                    <div class="calendar-days">
+                        <div class="weekdays">
+                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+                        </div>
+                        <div class="days" id="days-UN02"></div>
+                    </div>
+                    <div class="legend-mini">
+                        <div><span class="dot entrada"></span>Entrada</div>
+                        <div><span class="dot saida"></span>Saída</div>
+                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
+                        <div><span class="dot hospedagem"></span>Hospedagem</div>
+                    </div>
+                </div>
+                <div class="unit-calendar">
+                    <div class="unit-header">
+                        <h3>🏠 UN03</h3>
+                        <span class="reserva-count" id="count-UN03">0 reservas</span>
+                    </div>
+                    <div class="calendar-days">
+                        <div class="weekdays">
+                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+                        </div>
+                        <div class="days" id="days-UN03"></div>
+                    </div>
+                    <div class="legend-mini">
+                        <div><span class="dot entrada"></span>Entrada</div>
+                        <div><span class="dot saida"></span>Saída</div>
+                        <div><span class="dot sobreposicao"></span>Sobreposição</div>
+                        <div><span class="dot hospedagem"></span>Hospedagem</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="timeline">
+            <div class="section-header">
+                <h2>Timeline de Reservas</h2>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="month-nav" onclick="changeTimelineMonth(-1)">‹</button>
+                    <span id="timelineMonth" style="font-weight: bold; min-width: 150px; text-align: center;">Dezembro 2025</span>
+                    <button class="month-nav" onclick="changeTimelineMonth(1)">›</button>
+                    <button id="timelineTodayBtn" onclick="goToTimelineToday()" style="margin-left: 10px;">Hoje</button>
+                </div>
+            </div>
+            
+            <div id="timelineContainer" style="padding: 20px; overflow-x: auto;">
+                <!-- Timeline será renderizada aqui -->
+            </div>
+            
+            <div class="legend-mini" style="margin-top: 20px; padding: 0 20px;">
+                <div><span class="dot entrada"></span>Entrada</div>
+                <div><span class="dot saida"></span>Saída</div>
+                <div><span class="dot sobreposicao"></span>Sobreposição</div>
+                <div><span class="dot hospedagem"></span>Hospedagem</div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="reservas">
+            <div class="section-header">
+                <h2>Gerenciar Reservas</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn-secondary" onclick="exportarBackup()" style="background: #4caf50; color: white;">📥 Exportar Backup</button>
+                    <button class="btn-secondary" onclick="showImportBackup()" style="background: #ff9800; color: white;">📤 Importar Backup</button>
+                    <button class="btn-secondary" onclick="limparTodosDados()" style="background: #f44336; color: white;">🗑️ Limpar Tudo</button>
+                    <button class="btn-primary" onclick="showReservaForm()">+ Nova Reserva</button>
+                </div>
+            </div>
+
+            <!-- Import Backup Form -->
+            <div class="form-container" id="importBackupForm" style="display: none;">
+                <div class="form-card">
+                    <h3>Importar Backup JSON</h3>
+                    <p>Selecione um arquivo de backup (.json) para restaurar os dados:</p>
+                    <input type="file" id="backupFile" accept=".json" style="margin: 15px 0; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; width: 100%;">
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="hideImportBackup()">Cancelar</button>
+                        <button type="button" class="btn-primary" onclick="importarBackup()">Importar Backup</button>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="total-reservas">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="confirmadas">0</span>
+                    <span class="stat-label">Confirmadas</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="reservadas">0</span>
+                    <span class="stat-label">Reservas</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="executadas">0</span>
+                    <span class="stat-label">Executadas</span>
+                </div>
+            </div>
+            <div class="form-container" id="reservaForm" style="display: none;">
+                <div class="form-card">
+                    <h3 id="formTitle">Nova Reserva</h3>
+                    <form id="reservaFormElement">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nome do Cliente *</label>
+                                <div style="position: relative;">
+                                    <input type="text" id="nome" required placeholder="Digite o nome do cliente..." autocomplete="off">
+                                    <div id="nomeSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #e0e0e0; border-top: none; border-radius: 0 0 8px 8px; max-height: 200px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>WhatsApp</label>
+                                <input type="text" id="whatsapp" placeholder="5548999606725">
+                            </div>
+                            <div class="form-group">
+                                <label>País</label>
+                                <input type="text" id="pais" value="Brasil">
+                            </div>
+                            <div class="form-group">
+                                <label>Unidade *</label>
+                                <select id="unidade" required>
+                                    <option value="">Selecione</option>
+                                    <option value="UN01">UN01</option>
+                                    <option value="UN02">UN02</option>
+                                    <option value="UN03">UN03</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Check-in (14h) *</label>
+                                <input type="date" id="checkin" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Check-out (10h) *</label>
+                                <input type="date" id="checkout" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="status">
+                                    <option value="Resv">Reserva</option>
+                                    <option value="Conf">Confirmada</option>
+                                    <option value="Canc">Cancelada</option>
+                                    <option value="Exec">Executada</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Valor Total (R$)</label>
+                                <input type="number" id="valor" step="0.01" placeholder="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label>Valor do Sinal (R$)</label>
+                                <input type="number" id="valorSinal" step="0.01" placeholder="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label>Data do Pagamento</label>
+                                <input type="date" id="dataPagamento">
+                            </div>
+                            <div class="form-group">
+                                <label>Forma de Pagamento</label>
+                                <select id="formaPagamento">
+                                    <option value="">Selecione</option>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                    <option value="PIX">PIX</option>
+                                    <option value="Cartão Crédito">Cartão de Crédito</option>
+                                    <option value="Cartão Débito">Cartão de Débito</option>
+                                    <option value="Transferência">Transferência Bancária</option>
+                                    <option value="Boleto">Boleto</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Observações</label>
+                            <textarea id="observacoes" rows="3" placeholder="Informações adicionais..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="hideReservaForm()">Cancelar</button>
+                            <button type="submit" class="btn-primary">Salvar Reserva</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Unidade</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Status</th>
+                            <th>Valor</th>
+                            <th>Sinal</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reservasTable">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #666; padding: 40px;">
+                                Nenhuma reserva cadastrada. Clique em "+ Nova Reserva" para começar.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="contatos">
+            <div class="section-header">
+                <h2>Lista de Contatos</h2>
+                <button class="btn-primary" onclick="showImportForm()">📋 Importar Lista</button>
+            </div>
+            <div class="form-container" id="importForm" style="display: none;">
+                <div class="form-card">
+                    <h3>Importar Lista de Contatos</h3>
+                    <p>Cole sua lista no formato: NOME-WHATSAPP-PAIS-TEMPO-UNIDADE-STATUS</p>
+                    <p style="font-style: italic; color: #666; font-size: 0.85rem; margin-bottom: 15px;">
+                        Exemplo: JOÃO-5548999606725-Brasil-2526-UN01-Resv
+                    </p>
+                    <textarea id="importText" rows="10" placeholder="Cole aqui sua lista de contatos..."></textarea>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="hideImportForm()">Cancelar</button>
+                        <button type="button" class="btn-primary" onclick="importContatos()">Importar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="total-contatos">0</span>
+                    <span class="stat-label">Total Contatos</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="com-whatsapp">0</span>
+                    <span class="stat-label">Com WhatsApp</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="aguardando">0</span>
+                    <span class="stat-label">Aguardando</span>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>WhatsApp</th>
+                            <th>País</th>
+                            <th>Tempo</th>
+                            <th>Unidade Pref.</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contatosTable">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #666; padding: 40px;">
+                                Nenhum contato cadastrado. Use o botão "Importar Lista" para adicionar contatos.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMonth = new Date();
+        let currentTimelineMonth = new Date();
+        let reservas = [];
+        let contatos = [];
+        let currentEditingId = null;
+
+        // Função auxiliar para fazer parsing correto de datas sem problemas de timezone
+        function parseDate(dateString) {
+            // dateString no formato "YYYY-MM-DD"
+            const parts = dateString.split('-');
+            const year = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1;  // Mês é 0-indexed (0=Jan, 11=Dez)
+            const day = parseInt(parts[2], 10);
+            return new Date(year, month, day);
+        }
+
+        function loadData() {
+            try {
+                const reservasData = localStorage.getItem('reservas');
+                const contatosData = localStorage.getItem('contatos');
+                reservas = reservasData ? JSON.parse(reservasData) : [];
+                contatos = contatosData ? JSON.parse(contatosData) : [];
+                reservas = reservas.filter(r => r && r.id && r.nome && r.unidade);
+                contatos = contatos.filter(c => c && c.id && c.nome);
+                reservas.forEach(r => r.valor = parseFloat(r.valor) || 0);
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                reservas = []; contatos = [];
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateCalendar();
+            renderTimeline();
+            updateStats();
+            updateReservasTable();
+            updateContatosTable();
+            updateContatosStats();
+            setupEventListeners();
+            
+            // Aviso ao sair/atualizar a página
+            window.addEventListener('beforeunload', function(e) {
+                // Verificar se há dados para fazer backup
+                if (reservas.length > 0 || contatos.length > 0) {
+                    const message = 'Lembre-se de fazer backup dos seus dados! Deseja realmente sair?';
+                    e.preventDefault();
+                    e.returnValue = message;
+                    return message;
+                }
+            });
+        });
+
+        function setupEventListeners() {
+            document.getElementById('reservaFormElement').addEventListener('submit', handleReservaSubmit);
+            const today = new Date().toISOString().split('T')[0];
+            const checkinInput = document.getElementById('checkin');
+            const checkoutInput = document.getElementById('checkout');
+            checkinInput.min = today;
+            checkinInput.addEventListener('change', function() {
+                const checkinDate = new Date(this.value);
+                checkinDate.setDate(checkinDate.getDate() + 1);
+                checkoutInput.min = checkinDate.toISOString().split('T')[0];
+            });
+            
+            // Configurar autocomplete
+            setupAutocomplete();
+        }
+
+        function setupAutocomplete() {
+            const nomeInput = document.getElementById('nome');
+            const suggestionsContainer = document.getElementById('nomeSuggestions');
+            let selectedSuggestionIndex = -1;
+            let currentSuggestions = [];
+
+            nomeInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                
+                if (query.length < 2) {
+                    hideSuggestions();
+                    return;
+                }
+
+                // Buscar contatos que correspondem à consulta
+                currentSuggestions = contatos.filter(contato => 
+                    contato.nome && contato.nome.toLowerCase().includes(query)
+                );
+
+                if (currentSuggestions.length > 0) {
+                    showSuggestions(currentSuggestions);
+                } else {
+                    hideSuggestions();
+                }
+            });
+
+            nomeInput.addEventListener('keydown', function(e) {
+                if (currentSuggestions.length === 0) return;
+
+                switch(e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        selectedSuggestionIndex = Math.min(selectedSuggestionIndex + 1, currentSuggestions.length - 1);
+                        updateSelectedSuggestion();
+                        break;
+                    
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, -1);
+                        updateSelectedSuggestion();
+                        break;
+                    
+                    case 'Enter':
+                        e.preventDefault();
+                        if (selectedSuggestionIndex >= 0) {
+                            selectSuggestion(currentSuggestions[selectedSuggestionIndex]);
+                        }
+                        break;
+                    
+                    case 'Escape':
+                        hideSuggestions();
+                        break;
+                }
+            });
+
+            // Fechar sugestões ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!nomeInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+
+            function showSuggestions(suggestions) {
+                suggestionsContainer.innerHTML = '';
+                selectedSuggestionIndex = -1;
+
+                suggestions.forEach((contato, index) => {
+                    const suggestionDiv = document.createElement('div');
+                    suggestionDiv.style.cssText = 'padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s ease;';
+                    
+                    suggestionDiv.innerHTML = `
+                        <div style="font-weight: 500; color: #1565c0;">${contato.nome}</div>
+                        <div style="font-size: 0.85rem; color: #666; margin-top: 2px;">
+                            ${contato.whatsapp ? `📱 ${contato.whatsapp}` : 'Sem WhatsApp'}
+                            ${contato.pais ? ` • ${contato.pais}` : ''}
+                            ${contato.unidade ? ` • Pref: ${contato.unidade}` : ''}
+                        </div>
+                    `;
+
+                    suggestionDiv.addEventListener('mouseenter', function() {
+                        this.style.backgroundColor = '#e3f2fd';
+                    });
+
+                    suggestionDiv.addEventListener('mouseleave', function() {
+                        this.style.backgroundColor = 'transparent';
+                    });
+
+                    suggestionDiv.addEventListener('click', () => selectSuggestion(contato));
+                    suggestionsContainer.appendChild(suggestionDiv);
+                });
+
+                suggestionsContainer.style.display = 'block';
+            }
+
+            function hideSuggestions() {
+                suggestionsContainer.style.display = 'none';
+                selectedSuggestionIndex = -1;
+                currentSuggestions = [];
+            }
+
+            function updateSelectedSuggestion() {
+                const suggestions = suggestionsContainer.querySelectorAll('div');
+                suggestions.forEach((suggestion, index) => {
+                    if (index === selectedSuggestionIndex) {
+                        suggestion.style.backgroundColor = '#e3f2fd';
+                    } else {
+                        suggestion.style.backgroundColor = 'transparent';
+                    }
+                });
+            }
+
+            function selectSuggestion(contato) {
+                // Preencher os campos do formulário
+                document.getElementById('nome').value = contato.nome;
+                
+                if (contato.whatsapp && contato.whatsapp.trim()) {
+                    document.getElementById('whatsapp').value = contato.whatsapp;
+                }
+                
+                if (contato.pais && contato.pais.trim()) {
+                    document.getElementById('pais').value = contato.pais;
+                }
+                
+                // Se o contato tem uma unidade preferida, pré-selecionar
+                if (contato.unidade && contato.unidade.trim()) {
+                    document.getElementById('unidade').value = contato.unidade;
+                }
+
+                hideSuggestions();
+                
+                // Mostrar feedback visual
+                nomeInput.style.borderColor = '#4caf50';
+                setTimeout(() => {
+                    nomeInput.style.borderColor = '#e0e0e0';
+                }, 1000);
+
+                // Focar no próximo campo
+                document.getElementById('checkin').focus();
+            }
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            if (tabName === 'calendario') updateCalendar();
+            else if (tabName === 'reservas') { updateReservasTable(); updateStats(); }
+            else if (tabName === 'contatos') { updateContatosTable(); updateContatosStats(); }
+        }
+
+        function updateCalendar() {
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            document.getElementById('currentMonth').textContent = `${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
+            ['UN01', 'UN02', 'UN03'].forEach(unit => {
+                renderCalendarForUnit(unit);
+                updateUnitReservaCount(unit);
+            });
+        }
+
+        function renderCalendarForUnit(unit) {
+            const daysContainer = document.getElementById(`days-${unit}`);
+            daysContainer.innerHTML = '';
+            const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            for (let i = 0; i < 42; i++) {
+                const date = new Date(startDate);
+                date.setDate(startDate.getDate() + i);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.textContent = date.getDate();
+                if (date.getMonth() !== currentMonth.getMonth()) dayElement.classList.add('other-month');
+                const dayReservas = getReservasForDate(unit, date);
+                const status = getDayStatus(unit, date);
+                dayElement.classList.add(status);
+                
+                // Adicionar tooltip se houver reservas
+                if (status !== 'livre') {
+                    dayElement.dataset.unit = unit;
+                    dayElement.dataset.date = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                    dayElement.addEventListener('mouseenter', showTooltip);
+                    dayElement.addEventListener('mouseleave', hideTooltip);
+                    dayElement.addEventListener('mousemove', moveTooltip);
+                }
+                
+                if (dayReservas.length > 1) {
+                    const badge = document.createElement('div');
+                    badge.className = 'day-badge';
+                    badge.textContent = dayReservas.length;
+                    dayElement.appendChild(badge);
+                }
+                daysContainer.appendChild(dayElement);
+            }
+        }
+
+        function getReservasForDate(unit, date) {
+            return reservas.filter(reserva => {
+                if (reserva.unidade !== unit || reserva.status === 'Canc') return false;
+                const checkinDate = parseDate(reserva.checkin);
+                const checkoutDate = parseDate(reserva.checkout);
+                const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                return targetDate >= checkinDate && targetDate < checkoutDate;
+            });
+        }
+
+        function getDayStatus(unit, date) {
+            const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            
+            // Buscar TODAS as reservas da unidade (não apenas as "ativas" no dia)
+            const todasReservas = reservas.filter(r => r.unidade === unit && r.status !== 'Canc');
+            
+            let entradas = [];
+            let saidas = [];
+            let hospedagens = [];
+            
+            todasReservas.forEach(reserva => {
+                const checkinDate = parseDate(reserva.checkin);
+                const checkoutDate = parseDate(reserva.checkout);
+                
+                // Verificar se é dia de entrada
+                if (targetDate.getTime() === checkinDate.getTime()) {
+                    entradas.push(reserva);
+                }
+                
+                // Verificar se é dia de saída
+                if (targetDate.getTime() === checkoutDate.getTime()) {
+                    saidas.push(reserva);
+                }
+                
+                // Verificar se está hospedado (entre entrada e saída, excluindo checkout)
+                if (targetDate >= checkinDate && targetDate < checkoutDate) {
+                    hospedagens.push(reserva);
+                }
+            });
+            
+            // Determinar o status visual
+            if (entradas.length > 0 && saidas.length > 0) {
+                return 'sobreposicao';  // Entrada e saída no mesmo dia
+            } else if (entradas.length > 0) {
+                return 'entrada';  // Apenas entrada
+            } else if (saidas.length > 0) {
+                return 'saida';  // Apenas saída
+            } else if (hospedagens.length > 0) {
+                return 'hospedagem';  // Está hospedado
+            } else {
+                return 'livre';  // Dia livre
+            }
+        }
+
+        // Funções de Tooltip
+        let tooltipElement = null;
+
+        function createTooltip() {
+            if (!tooltipElement) {
+                tooltipElement = document.createElement('div');
+                tooltipElement.className = 'tooltip';
+                document.body.appendChild(tooltipElement);
+            }
+            return tooltipElement;
+        }
+
+        function showTooltip(event) {
+            const dayElement = event.currentTarget;
+            const unit = dayElement.dataset.unit;
+            const dateStr = dayElement.dataset.date;
+            const date = parseDate(dateStr);
+            
+            const tooltip = createTooltip();
+            const tooltipContent = getTooltipContent(unit, date);
+            
+            if (tooltipContent) {
+                tooltip.innerHTML = tooltipContent;
+                tooltip.classList.add('show');
+                moveTooltip(event);
+            }
+        }
+
+        function hideTooltip() {
+            if (tooltipElement) {
+                tooltipElement.classList.remove('show');
+            }
+        }
+
+        function moveTooltip(event) {
+            if (tooltipElement && tooltipElement.classList.contains('show')) {
+                const x = event.clientX + 15;
+                const y = event.clientY + 15;
+                tooltipElement.style.left = x + 'px';
+                tooltipElement.style.top = y + 'px';
+            }
+        }
+
+        function getTooltipContent(unit, date) {
+            const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const todasReservas = reservas.filter(r => r.unidade === unit && r.status !== 'Canc');
+            
+            let entradas = [];
+            let saidas = [];
+            let hospedagens = [];
+            
+            todasReservas.forEach(reserva => {
+                const checkinDate = parseDate(reserva.checkin);
+                const checkoutDate = parseDate(reserva.checkout);
+                
+                if (targetDate.getTime() === checkinDate.getTime()) {
+                    entradas.push(reserva);
+                }
+                
+                if (targetDate.getTime() === checkoutDate.getTime()) {
+                    saidas.push(reserva);
+                }
+                
+                if (targetDate >= checkinDate && targetDate < checkoutDate) {
+                    hospedagens.push(reserva);
+                }
+            });
+            
+            let content = '';
+            
+            // Sobreposição (entrada e saída no mesmo dia)
+            if (entradas.length > 0 && saidas.length > 0) {
+                content += '<strong>🔄 SOBREPOSIÇÃO</strong><br>';
+                
+                saidas.forEach(reserva => {
+                    content += `<div class="tooltip-divider"></div>`;
+                    content += `<strong>📤 SAÍDA:</strong> ${reserva.nome}<br>`;
+                    if (reserva.whatsapp) content += `📱 ${reserva.whatsapp}<br>`;
+                    content += `🏠 ${reserva.unidade}<br>`;
+                    content += `📅 ${formatDate(reserva.checkin)} → ${formatDate(reserva.checkout)}`;
+                });
+                
+                entradas.forEach(reserva => {
+                    content += `<div class="tooltip-divider"></div>`;
+                    content += `<strong>📥 ENTRADA:</strong> ${reserva.nome}<br>`;
+                    if (reserva.whatsapp) content += `📱 ${reserva.whatsapp}<br>`;
+                    content += `🏠 ${reserva.unidade}<br>`;
+                    content += `📅 ${formatDate(reserva.checkin)} → ${formatDate(reserva.checkout)}`;
+                });
+            }
+            // Apenas entrada
+            else if (entradas.length > 0) {
+                entradas.forEach((reserva, index) => {
+                    if (index > 0) content += `<div class="tooltip-divider"></div>`;
+                    content += `<strong>📥 ENTRADA:</strong> ${reserva.nome}<br>`;
+                    if (reserva.whatsapp) content += `📱 ${reserva.whatsapp}<br>`;
+                    content += `🏠 ${reserva.unidade}<br>`;
+                    content += `📅 ${formatDate(reserva.checkin)} → ${formatDate(reserva.checkout)}<br>`;
+                    content += `💰 R$ ${reserva.valor.toFixed(2)}`;
+                });
+            }
+            // Apenas saída
+            else if (saidas.length > 0) {
+                saidas.forEach((reserva, index) => {
+                    if (index > 0) content += `<div class="tooltip-divider"></div>`;
+                    content += `<strong>📤 SAÍDA:</strong> ${reserva.nome}<br>`;
+                    if (reserva.whatsapp) content += `📱 ${reserva.whatsapp}<br>`;
+                    content += `🏠 ${reserva.unidade}<br>`;
+                    content += `📅 ${formatDate(reserva.checkin)} → ${formatDate(reserva.checkout)}<br>`;
+                    content += `💰 R$ ${reserva.valor.toFixed(2)}`;
+                });
+            }
+            // Hospedagem
+            else if (hospedagens.length > 0) {
+                hospedagens.forEach((reserva, index) => {
+                    if (index > 0) content += `<div class="tooltip-divider"></div>`;
+                    content += `<strong>🏠 HOSPEDAGEM:</strong> ${reserva.nome}<br>`;
+                    if (reserva.whatsapp) content += `📱 ${reserva.whatsapp}<br>`;
+                    content += `🏠 ${reserva.unidade}<br>`;
+                    content += `📅 ${formatDate(reserva.checkin)} → ${formatDate(reserva.checkout)}<br>`;
+                    content += `💰 R$ ${reserva.valor.toFixed(2)}`;
+                });
+            }
+            
+            return content;
+        }
+
+        function updateUnitReservaCount(unit) {
+            const countElement = document.getElementById(`count-${unit}`);
+            if (countElement) {
+                const count = reservas.filter(r => r.unidade === unit && r.status !== 'Canc').length;
+                countElement.textContent = `${count} reservas`;
+            }
+        }
+
+        function changeMonth(direction) {
+            currentMonth.setMonth(currentMonth.getMonth() + direction);
+            updateCalendar();
+        }
+        
+        // Funções da Timeline
+        function changeTimelineMonth(direction) {
+            currentTimelineMonth.setMonth(currentTimelineMonth.getMonth() + direction);
+            renderTimeline();
+        }
+        
+        function goToTimelineToday() {
+            currentTimelineMonth = new Date();
+            renderTimeline();
+        }
+        
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            const monthLabel = document.getElementById('timelineMonth');
+            
+            if (!container || !monthLabel) return;
+            
+            const year = currentTimelineMonth.getFullYear();
+            const month = currentTimelineMonth.getMonth();
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                              'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            
+            monthLabel.textContent = `${monthNames[month]} ${year}`;
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            
+            let html = '<div class="timeline-wrapper"><div class="timeline-grid">';
+            
+            // Cabeçalho
+            html += '<div class="timeline-header">';
+            html += '<div class="timeline-unit-label">Unidade</div>';
+            html += '<div class="timeline-days-header">';
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const dayName = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][date.getDay()];
+                html += `<div class="timeline-day-header">${dayName}<span class="day-number">${day}</span></div>`;
+            }
+            
+            html += '</div></div>';
+            
+            // Linhas para cada unidade
+            ['UN01', 'UN02', 'UN03'].forEach(unit => {
+                html += '<div class="timeline-row">';
+                html += `<div class="timeline-unit-cell">🏠 ${unit}</div>`;
+                html += '<div class="timeline-days-row">';
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const status = getDayStatus(unit, date);
+                    
+                    html += `<div class="timeline-day-cell ${status}" 
+                                  data-unit="${unit}" 
+                                  data-date="${dateStr}"
+                                  onmouseenter="showTooltip(event)"
+                                  onmouseleave="hideTooltip()"
+                                  onmousemove="moveTooltip(event)">
+                             </div>`;
+                }
+                
+                html += '</div></div>';
+            });
+            
+            html += '</div></div>';
+            container.innerHTML = html;
+        }
+
+        function goToToday() {
+            currentMonth = new Date();
+            updateCalendar();
+        }
+
+        // Função para gerar relatório
+        function gerarRelatorio() {
+            const mes = currentMonth.getMonth();
+            const ano = currentMonth.getFullYear();
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            
+            let relatorio = '';
+            relatorio += '===========================================================================\n';
+            relatorio += '                    RELATORIO DE RESERVAS E DISPONIBILIDADE\n';
+            relatorio += '                    Cachoeira do Bom Jesus - Temporada 2025/2026\n';
+            relatorio += '===========================================================================\n\n';
+            relatorio += `Periodo: ${monthNames[mes]} de ${ano}\n`;
+            relatorio += `Data de Geracao: ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}\n\n`;
+            
+            // Estatísticas gerais
+            const reservasAtivas = reservas.filter(r => r.status !== 'Canc');
+            const reservasConfirmadas = reservas.filter(r => r.status === 'Conf');
+            const valorTotal = reservasAtivas.reduce((sum, r) => sum + (r.valor || 0), 0);
+            
+            relatorio += '---------------------------------------------------------------------------\n';
+            relatorio += '                           ESTATISTICAS GERAIS\n';
+            relatorio += '---------------------------------------------------------------------------\n\n';
+            relatorio += `Total de Reservas Ativas: ${reservasAtivas.length}\n`;
+            relatorio += `Reservas Confirmadas: ${reservasConfirmadas.length}\n`;
+            relatorio += `Valor Total: R$ ${valorTotal.toFixed(2)}\n\n`;
+            
+            // Calcular dados de disponibilidade para todas as unidades
+            const mesesTemporada = [
+                { mes: 10, ano: 2025, nome: 'Nov/25' },
+                { mes: 11, ano: 2025, nome: 'Dez/25' },
+                { mes: 0, ano: 2026, nome: 'Jan/26' },
+                { mes: 1, ano: 2026, nome: 'Fev/26' },
+                { mes: 2, ano: 2026, nome: 'Mar/26' },
+                { mes: 3, ano: 2026, nome: 'Abr/26' },
+                { mes: 4, ano: 2026, nome: 'Mai/26' }
+            ];
+            
+            const dadosDisponibilidade = {};
+            
+            ['UN01', 'UN02', 'UN03'].forEach(unit => {
+                dadosDisponibilidade[unit] = {
+                    meses: [],
+                    totalDias: 0,
+                    totalOcupados: 0,
+                    totalLivres: 0,
+                    taxaGeral: 0
+                };
+                
+                mesesTemporada.forEach(mesInfo => {
+                    const diasNoMes = new Date(mesInfo.ano, mesInfo.mes + 1, 0).getDate();
+                    let diasOcupados = 0;
+                    
+                    for (let dia = 1; dia <= diasNoMes; dia++) {
+                        const date = new Date(mesInfo.ano, mesInfo.mes, dia);
+                        const reservasNoDia = getReservasForDate(unit, date);
+                        if (reservasNoDia.length > 0) {
+                            diasOcupados++;
+                        }
+                    }
+                    
+                    const diasLivres = diasNoMes - diasOcupados;
+                    const taxaOcupacao = ((diasOcupados / diasNoMes) * 100).toFixed(1);
+                    
+                    dadosDisponibilidade[unit].meses.push({
+                        nome: mesInfo.nome,
+                        diasNoMes: diasNoMes,
+                        diasOcupados: diasOcupados,
+                        diasLivres: diasLivres,
+                        taxaOcupacao: taxaOcupacao
+                    });
+                    
+                    dadosDisponibilidade[unit].totalDias += diasNoMes;
+                    dadosDisponibilidade[unit].totalOcupados += diasOcupados;
+                });
+                
+                dadosDisponibilidade[unit].totalLivres = dadosDisponibilidade[unit].totalDias - dadosDisponibilidade[unit].totalOcupados;
+                dadosDisponibilidade[unit].taxaGeral = ((dadosDisponibilidade[unit].totalOcupados / dadosDisponibilidade[unit].totalDias) * 100).toFixed(1);
+            });
+            
+            // Reservas por unidade
+            ['UN01', 'UN02', 'UN03'].forEach(unit => {
+                const reservasUnit = reservasAtivas.filter(r => r.unidade === unit);
+                
+                relatorio += '===========================================================================\n';
+                relatorio += `                                 ${unit}\n`;
+                relatorio += '===========================================================================\n\n';
+                
+                if (reservasUnit.length === 0) {
+                    relatorio += '  - Nenhuma reserva cadastrada para esta unidade.\n\n';
+                } else {
+                    relatorio += `  Total de Reservas: ${reservasUnit.length}\n\n`;
+                    
+                    // Ordenar por data de check-in
+                    reservasUnit.sort((a, b) => parseDate(a.checkin) - parseDate(b.checkin));
+                    
+                    // Calcular valor total da unidade
+                    const valorTotalUnit = reservasUnit.reduce((sum, r) => sum + (r.valor || 0), 0);
+                    
+                    reservasUnit.forEach((reserva, index) => {
+                        relatorio += `  Reserva ${index + 1}\n`;
+                        relatorio += `  Cliente: ${reserva.nome}\n`;
+                        if (reserva.whatsapp) {
+                            relatorio += `  WhatsApp: ${reserva.whatsapp}\n`;
+                        }
+                        if (reserva.pais && reserva.pais !== 'Brasil') {
+                            relatorio += `  País: ${reserva.pais}\n`;
+                        }
+                        relatorio += `  Check-in: ${formatDate(reserva.checkin)}\n`;
+                        relatorio += `  Check-out: ${formatDate(reserva.checkout)}\n`;
+                        
+                        const dias = Math.ceil((parseDate(reserva.checkout) - parseDate(reserva.checkin)) / (1000 * 60 * 60 * 24));
+                        relatorio += `  Duração: ${dias} dia(s)\n`;
+                        
+                        const statusText = getStatusText(reserva.status);
+                        relatorio += `  Status: ${statusText}\n`;
+                        relatorio += `  Valor Total: R$ ${reserva.valor.toFixed(2)}\n`;
+                        
+                        if (reserva.valorSinal && reserva.valorSinal > 0) {
+                            relatorio += `  Valor do Sinal: R$ ${reserva.valorSinal.toFixed(2)}\n`;
+                            const saldo = reserva.valor - reserva.valorSinal;
+                            relatorio += `  Saldo Restante: R$ ${saldo.toFixed(2)}\n`;
+                        }
+                        
+                        if (reserva.dataPagamento) {
+                            relatorio += `  Data do Pagamento: ${formatDate(reserva.dataPagamento)}\n`;
+                        }
+                        
+                        if (reserva.formaPagamento) {
+                            relatorio += `  Forma de Pagamento: ${reserva.formaPagamento}\n`;
+                        }
+                        
+                        if (reserva.observacoes) {
+                            relatorio += `  Obs: ${reserva.observacoes}\n`;
+                        }
+                        
+                        relatorio += '\n';
+                    });
+                    
+                    // Adicionar valor total da unidade
+                    relatorio += '  ---------------------------------------------------------------------------\n';
+                    relatorio += `  VALOR TOTAL DA ${unit}: R$ ${valorTotalUnit.toFixed(2)}\n`;
+                    relatorio += '  ---------------------------------------------------------------------------\n\n';
+                }
+            });
+            
+            // Tabela de disponibilidade consolidada
+            relatorio += '===========================================================================\n';
+            relatorio += '           DISPONIBILIDADE DA TEMPORADA 2025/2026 (NOV/25 - MAI/26)\n';
+            relatorio += '===========================================================================\n\n';
+            
+            // Cabeçalho da tabela
+            relatorio += '  Unidade  - Nov/25 - Dez/25 - Jan/26 - Fev/26 - Mar/26 - Abr/26 - Mai/26 -  TOTAL\n';
+            relatorio += '  ---------+--------+--------+--------+--------+--------+--------+--------+---------\n';
+            
+            // Linhas para cada unidade
+            ['UN01', 'UN02', 'UN03'].forEach(unit => {
+                const dados = dadosDisponibilidade[unit];
+                
+                // Linha de dias ocupados
+                let linha = `  ${unit}     -`;
+                dados.meses.forEach(m => {
+                    linha += ` ${m.diasOcupados.toString().padStart(2, ' ')}/${m.diasNoMes} -`;
+                });
+                linha += ` ${dados.totalOcupados}/${dados.totalDias}\n`;
+                relatorio += linha;
+                
+                // Linha de taxa de ocupação
+                linha = `  Taxa (%) -`;
+                dados.meses.forEach(m => {
+                    linha += ` ${m.taxaOcupacao.padStart(5, ' ')} -`;
+                });
+                linha += ` ${dados.taxaGeral.padStart(5, ' ')}\n`;
+                relatorio += linha;
+                
+                relatorio += '  ---------+--------+--------+--------+--------+--------+--------+--------+---------\n';
+            });
+            
+            relatorio += '\n  Legenda: Dias Ocupados/Total de Dias no Mes\n\n';
+            
+            relatorio += '===========================================================================\n';
+            relatorio += '                              FIM DO RELATORIO\n';
+            relatorio += '===========================================================================\n';
+            
+            // Criar modal para exibir o relatório
+            mostrarModalRelatorio(relatorio);
+        }
+
+        function mostrarModalRelatorio(relatorio) {
+            // Criar modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                border-radius: 16px;
+                padding: 30px;
+                max-width: 900px;
+                max-height: 90vh;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            `;
+            
+            const header = document.createElement('div');
+            header.style.cssText = `
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #e0e0e0;
+            `;
+            
+            const title = document.createElement('h2');
+            title.textContent = '📄 Relatório de Reservas';
+            title.style.cssText = 'color: #1565c0; margin: 0;';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕';
+            closeBtn.style.cssText = `
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #666;
+                padding: 0;
+                width: 30px;
+                height: 30px;
+            `;
+            closeBtn.onclick = () => document.body.removeChild(modal);
+            
+            header.appendChild(title);
+            header.appendChild(closeBtn);
+            
+            const textArea = document.createElement('textarea');
+            textArea.value = relatorio;
+            textArea.readOnly = true;
+            textArea.style.cssText = `
+                flex: 1;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+                padding: 15px;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                resize: none;
+                margin-bottom: 20px;
+                line-height: 1.5;
+            `;
+            
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.cssText = 'display: flex; gap: 10px; justify-content: flex-end;';
+            
+            const downloadBtn = document.createElement('button');
+            downloadBtn.textContent = '💾 Baixar TXT';
+            downloadBtn.className = 'btn-primary';
+            downloadBtn.onclick = () => baixarRelatorio(relatorio);
+            
+            const printBtn = document.createElement('button');
+            printBtn.textContent = '🖨️ Imprimir';
+            printBtn.className = 'btn-secondary';
+            printBtn.style.cssText = 'background: #2196f3; color: white;';
+            printBtn.onclick = () => imprimirRelatorio(relatorio);
+            
+            buttonContainer.appendChild(downloadBtn);
+            buttonContainer.appendChild(printBtn);
+            
+            modalContent.appendChild(header);
+            modalContent.appendChild(textArea);
+            modalContent.appendChild(buttonContainer);
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+        }
+
+        function baixarRelatorio(relatorio) {
+            const blob = new Blob([relatorio], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const filename = `Relatorio_Reservas_${monthNames[currentMonth.getMonth()]}_${currentMonth.getFullYear()}.txt`;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function imprimirRelatorio(relatorio) {
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write('<html><head><title>Relatório de Reservas</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: "Courier New", monospace; font-size: 12px; line-height: 1.5; padding: 20px; }');
+            printWindow.document.write('pre { white-space: pre-wrap; word-wrap: break-word; }');
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<pre>' + relatorio + '</pre>');
+            printWindow.document.write('</body></html>');
+
+    <!-- Tooltip element -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <!-- Firebase SDK (v10.7.1) -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/firestore.js"></script>
+    
+    <!-- App Logic -->
+    <script src="js/app.js"></script>
+</body>
+</html>
